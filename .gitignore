@@ -1,0 +1,9 @@
+.vscode
+backend/backend/media
+backend/backend/db.sqlite3
+backend/backend/post/migrations
+backend/backend/post/__pycache__
+backend/backend/backend/__pycache__
+
+# model
+backend/backend/post/model.pth

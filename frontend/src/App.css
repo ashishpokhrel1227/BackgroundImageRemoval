@@ -1,0 +1,25 @@
+button {
+    cursor: pointer;
+}
+
+.form-control {
+    margin-top: 18px;
+}
+
+.image, .form-control, .enable-crop-botton, .crop-botton, .segmented-image {
+    display: flex;
+    justify-content: center;
+}
+
+.segmented-image {
+    /* position: absolute; */
+    margin-left: 10px;
+}
+
+.cropped-image {
+    margin-left: 15px;
+}
+
+
+
+
