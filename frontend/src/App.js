@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import Cropper from 'react-cropper'
+import FileSaver from 'file-saver'
 
 import 'cropperjs/dist/cropper.css'
 
@@ -71,6 +72,10 @@ const App = () => {
       setForeground(res.data.img)
     })
     .catch(err => console.log(err))
+  }
+
+  const downloadForeground = () => {
+    FileSaver.saveAs(`http://localhost:8000${foreground}`, 'foreground.png')
   }
 
   return (
@@ -182,6 +187,12 @@ const App = () => {
           !toCrop &&
           <div className='crop-botton'>
             <button onClick={handleCrop}>Crop Image</button> 
+          </div>
+        }
+        {
+          foreground &&
+          <div className='download-botton' style={{ marginLeft: '5px'}}>
+            <button onClick={downloadForeground}>Download foreground</button>
           </div>
         }
       </div>
