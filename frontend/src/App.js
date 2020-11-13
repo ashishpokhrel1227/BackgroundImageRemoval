@@ -61,7 +61,7 @@ const App = () => {
   const handleCrop = () => {
     setToCrop(!toCrop)
     setSegImage(null)
-    // setForeground(null)
+    setForeground(null)
   }
 
   const getForegroundImage = () => {
@@ -75,7 +75,7 @@ const App = () => {
   }
 
   const downloadForeground = () => {
-    FileSaver.saveAs(`http://localhost:8000${foreground}`, 'foreground.png')
+    FileSaver.saveAs(`http://localhost:8000${foreground}`, `foreground_${Math.random()}.png`)
   }
 
   return (
