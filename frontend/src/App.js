@@ -13,6 +13,7 @@ const App = () => {
   const [ cropData, setCropData ] = useState('#')
   const [ cropper, setCropper ] = useState()  
   const [ segImage, setSegImage ] = useState(null)
+  const [ foreground, setForeground ] = useState(null)
 
   const onChange = (e) => {
     e.preventDefault()
@@ -20,11 +21,15 @@ const App = () => {
     setToCrop(false)
     setCropData('#')
     setSegImage(null)
+    setForeground(null)
   }
 
   const getCropData = () => {
     if ( typeof cropper !== 'undefined' ) {
-      setCropData(cropper.getCroppedCanvas().toDataURL())   
+      setCropData(cropper.getCroppedCanvas().toDataURL())  
+      setForeground(null) 
+      setSegImage(null)
+      // console.log('foreground is: ', foreground) 
     }
   }
 
@@ -47,12 +52,25 @@ const App = () => {
     .then(res => {
       // console.log(res.data.image)
       setSegImage(res.data.image)
+      console.log('foreground image is: ', foreground)
     })
     .catch(err => console.log(err))
   }
 
   const handleCrop = () => {
     setToCrop(!toCrop)
+    setSegImage(null)
+    // setForeground(null)
+  }
+
+  const getForegroundImage = () => {
+    let url = 'http://localhost:8000/api/foreground/'
+    axios.get(url)
+    .then(res => {
+      // console.log(res)
+      setForeground(res.data.img)
+    })
+    .catch(err => console.log(err))
   }
 
   return (
@@ -71,6 +89,7 @@ const App = () => {
         
         {
           toCrop && 
+          !foreground &&
           <div className='cropping-image'>
             <Cropper 
               style={{ height: 400, width: 400 }}
@@ -97,7 +116,7 @@ const App = () => {
           <div className='preview-image'>
             <img 
               src={URL.createObjectURL(image)}
-              style={{ width: 400, height: 400}}
+              style={{ width: 'auto', height: 400}}
               alt='preview'
             />
           </div>
@@ -123,26 +142,49 @@ const App = () => {
           />
         </div>
       }
+      {
+        foreground &&
+        <div className='foreground-image' style={{ marginLeft: '5px'}}>
+          <img
+            src={`http://127.0.0.1:8000${foreground}`} 
+            style={{ width: 'auto', height: 400 }}
+            alt='foregroundImage'
+          />
+        </div>
+      }
       </div>
       <br />
-      {
-        toCrop && 
-        <div className='enable-crop-botton'>
-          <button 
-            onClick={getCropData}
-          >
-            Crop
-          </button>
-        </div>
-      }
-      <br />
-      {
-        image &&
-        !toCrop &&
-        <div className='crop-botton'>
-          <button onClick={handleCrop}>Crop Image</button> 
-        </div>
-      }
+      <div className='botton'>
+        {
+          segImage &&
+          <div className='foreground-botton'>
+            <button
+              onClick={getForegroundImage}
+            >
+              Get Foreground
+            </button>
+          </div>
+        }
+        {
+          toCrop && 
+          // !foreground &&
+          <div className='enable-crop-botton'>
+            <button 
+              onClick={getCropData}
+            >
+              Crop
+            </button>
+          </div>
+        }
+        <br />
+        {
+          image &&
+          !toCrop &&
+          <div className='crop-botton'>
+            <button onClick={handleCrop}>Crop Image</button> 
+          </div>
+        }
+      </div>
     </div>
   )
 }

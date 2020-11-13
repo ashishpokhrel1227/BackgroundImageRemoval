@@ -9,8 +9,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status 
 
-from .models import Post 
-from .serializers import PostSerializer
+from .models import Post, Foreground
+from .serializers import PostSerializer, ForegroundSerializer
 from .segmentImage import SegmentedImage
 from .removeBackground import RemoveBackground
 
@@ -59,6 +59,10 @@ class PostView(APIView):
             print('our image is: ', type(imageData))
             segmentedImage = SegmentedImage(imageData, 'post/model.pth')
             print('segmented image is: ', segmentedImage)
+
+            img = Image.open(imageData)
+            img.save('image.jpg')
+
             segmentedImage.save('segment.jpg')
             segImage = File(open('segment.jpg', 'rb'))
             seg = Post(image=segImage)
@@ -80,3 +84,29 @@ class PostView(APIView):
             #     print('error', posts_serializer.errors)
             #     return Response(posts_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class ForegroundView(APIView):
+    # parser_classes = (MultiPartParser, FormParser)
+
+    def get(self, request, *args, **kwargs):
+        print('hey i am functioning')
+        # img = Image.open('image.jpg')
+        # print('img is: ', img)
+        foreground = File(open('foreground.jpg', 'rb'))
+
+        img_rgb = Image.open(foreground)
+
+        # this is alpha channel
+        segment = Image.open('segment.jpg').convert('L').resize(img_rgb.size)
+
+        img_rgba = img_rgb.copy()
+
+        img_rgba.putalpha(segment)
+        img_rgba.save('foreground_.png')
+        foreground_image = File(open('foreground_.png', 'rb'))
+
+
+        foreground_img = Foreground(img=foreground_image)
+        foreground_img.img.save('foreground_.png', foreground_image)
+        foregroundSerializer = ForegroundSerializer(foreground_img)
+
+        return Response(foregroundSerializer.data, status=status.HTTP_200_OK)

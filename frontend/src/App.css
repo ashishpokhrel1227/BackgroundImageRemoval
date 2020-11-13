@@ -6,7 +6,7 @@ button {
     margin-top: 18px;
 }
 
-.image, .form-control, .enable-crop-botton, .crop-botton, .segmented-image {
+.image, .form-control, .segmented-image, .botton {
     display: flex;
     justify-content: center;
 }
@@ -18,6 +18,10 @@ button {
 
 .cropped-image {
     margin-left: 15px;
+}
+
+.foreground-botton {
+    margin-right: 5px;
 }
 
 

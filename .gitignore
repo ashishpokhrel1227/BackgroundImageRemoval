@@ -5,5 +5,10 @@ backend/backend/post/migrations
 backend/backend/post/__pycache__
 backend/backend/backend/__pycache__
 
+backend/backend/foreground.jpg
+backend/backend/image.jpg
+backend/backend/segment.jpg
+backend/backend/foreground_.png
+
 # model
 backend/backend/post/model.pth

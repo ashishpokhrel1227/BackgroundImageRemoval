@@ -21,6 +21,6 @@ def RemoveBackground(inputImageFile, outputImageFile):
                 if output_data[i, j, k] == 0:
                     for x in range(3):
                         input_data[x, j, k] = 1
-
+    
     return postprocess(input_data)
 
