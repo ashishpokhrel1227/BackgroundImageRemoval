@@ -2,7 +2,7 @@ button {
     cursor: pointer;
 }
 
-.form-control {
+.form-control, .image {
     margin-top: 18px;
 }
 
